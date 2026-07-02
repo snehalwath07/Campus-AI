@@ -1,12 +1,7 @@
 ## Live Demo
 Check out the deployed version of the project here:
 
-🔗 https://your-vercel-link.vercel.app/
-
-Backend API (Swagger Documentation):
-
-🔗 https://your-render-link.onrender.com/docs/
-
+🔗 https://campus-ai-dusky.vercel.app
 ---
 
 # CampusAI – AI College Admission Assistant
