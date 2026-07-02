@@ -1,0 +1,32 @@
+CampusAI/
+├── backend/
+│   ├── app/
+│   │   ├── auth/         # JWT credentials and authorization handler
+│   │   ├── config/       # Environment configuration settings
+│   │   ├── database/     # MongoDB driver setup
+│   │   ├── models/       # Database schemas (Pydantic / MongoDB)
+│   │   ├── routers/      # API Endpoints (/auth/*, /colleges/*, /saved-colleges/*, /chat/*, /planner/*, /profile/*)
+│   │   ├── schemas/      # HTTP request and response structures
+│   │   └── services/     # Hybrid AI Engine & Gemini API caller
+│   ├── .env              # Secrets configuration
+│   ├── .env.example      # Example environment variables
+│   ├── main.py           # Dev server runner
+│   ├── requirements.txt  # Python package list
+│   ├── verify_auth.py    # Local integration verification test (Phase 1)
+│   └── verify_phase3.py  # AI intent & roadmap verification test (Phase 3)
+├── frontend/
+│   ├── src/
+│   │   ├── components/   # Reusable UI elements (Input, Button, PasswordStrength)
+│   │   ├── context/      # Session and global Auth state management
+│   │   ├── layouts/      # Split-pane responsive layouts
+│   │   ├── pages/        # Views (Login, Signup, Recovery, Reset, Home, AiChat, AdmissionPlanner, CompareColleges, SavedColleges, Profile)
+│   │   ├── services/     # Axios client and API mapping clients
+│   │   ├── styles/       # Tailwind v4 configuration and custom CSS
+│   │   └── types/        # TypeScript interfaces
+│   ├── package.json      # NPM dependencies
+│   ├── tsconfig.json     # TypeScript project config
+│   └── vite.config.ts    # Bundler config
+├── docker-compose.yml     # Container orchestration config
+├── .gitignore            # Git exclusion mapping
+├── LICENSE               # MIT License details
+└── README.md             # Guide documentation
