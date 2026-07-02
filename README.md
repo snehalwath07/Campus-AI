@@ -1,189 +1,188 @@
-# CampusAI - India's AI Admission Assistant
+## Live Demo
+Check out the deployed version of the project here:
 
-> One Platform. Every College. Every Course. Every Admission Answer.
+🔗 https://your-vercel-link.vercel.app/
 
-CampusAI is a central education admission console designed to simplify college admissions across India.
+Backend API (Swagger Documentation):
 
-This repository contains the complete production-ready **Phase 1, Phase 2, and Phase 3 codebase**, implementing a premium, dark-themed, purple-accented user experience with a fully integrated FastAPI backend, MongoDB data persistence, and a hybrid AI Counselor.
+🔗 https://your-render-link.onrender.com/docs/
 
 ---
 
-## Folder Structure
+# CampusAI – AI College Admission Assistant
 
 ```text
-CampusAI/
-├── backend/
-│   ├── app/
-│   │   ├── auth/         # JWT credentials and authorization handler
-│   │   ├── config/       # Environment configuration settings
-│   │   ├── database/     # MongoDB driver setup
-│   │   ├── models/       # Database schemas (Pydantic / MongoDB)
-│   │   ├── routers/      # API Endpoints (/auth/*, /colleges/*, /saved-colleges/*, /chat/*, /planner/*, /profile/*)
-│   │   ├── schemas/      # HTTP request and response structures
-│   │   └── services/     # Hybrid AI Engine & Gemini API caller
-│   ├── .env              # Secrets configuration
-│   ├── .env.example      # Example environment variables
-│   ├── main.py           # Dev server runner
-│   ├── requirements.txt  # Python package list
-│   ├── verify_auth.py    # Local integration verification test (Phase 1)
-│   └── verify_phase3.py  # AI intent & roadmap verification test (Phase 3)
-├── frontend/
-│   ├── src/
-│   │   ├── components/   # Reusable UI elements (Input, Button, PasswordStrength)
-│   │   ├── context/      # Session and global Auth state management
-│   │   ├── layouts/      # Split-pane responsive layouts
-│   │   ├── pages/        # Views (Login, Signup, Recovery, Reset, Home, AiChat, AdmissionPlanner, CompareColleges, SavedColleges, Profile)
-│   │   ├── services/     # Axios client and API mapping clients
-│   │   ├── styles/       # Tailwind v4 configuration and custom CSS
-│   │   └── types/        # TypeScript interfaces
-│   ├── package.json      # NPM dependencies
-│   ├── tsconfig.json     # TypeScript project config
-│   └── vite.config.ts    # Bundler config
-├── docker-compose.yml     # Container orchestration config
-├── .gitignore            # Git exclusion mapping
-├── LICENSE               # MIT License details
-└── README.md             # Guide documentation
+Author(s): Snehal Wath
+Affiliation: RTM Nagpur University
+Date: 02/07/2026
 ```
 
----
+## Abstract
 
-## Tech Stack
+```
+CampusAI is an AI-powered college admission assistance platform developed to simplify the college admission process for students. The system combines artificial intelligence with a modern web application to provide personalized admission guidance, AI-based counseling, college comparison, admission roadmap generation, and profile management.
 
-### Frontend
-- **Framework:** React 19, Vite, TypeScript
-- **Styling:** Tailwind CSS v4, Framer Motion (micro-animations)
-- **State & Server Async:** TanStack React Query, Axios
-- **Form & Validation:** React Hook Form, Zod
-- **Icons & Alerts:** Lucide React, Sonner (Toast alerts)
+Students can ask admission-related questions, compare colleges based on fees, eligibility, courses, admission process, and required documents, generate customized admission roadmaps according to their academic profile, and securely manage their preferences through a single dashboard.
 
-### Backend
-- **Framework:** FastAPI, Python 3.11+
-- **Database Driver:** Motor (Async MongoDB Driver) + dnspython
-- **Security:** JWT (PyJWT), bcrypt (Password hashing)
-- **Validation:** Pydantic V2, Pydantic Settings
-- **HTTP Client:** Httpx (Queries Gemini REST API)
-
-### Database
-- **Engine:** MongoDB Atlas / Local MongoDB fallback
-
----
-
-## Setup Instructions
-
-### Environment Variables
-
-Create a `.env` file in the `backend/` directory.
-
-```ini
-# backend/.env
-MONGODB_URI=mongodb+srv://<username>:<password>@cluster0.mongodb.net/campusai?retryWrites=true&w=majority
-DATABASE_NAME=campusai
-
-# JWT Authentication Config
-JWT_SECRET_KEY=generate-a-secure-32-byte-hexadecimal-key
-JWT_ALGORITHM=HS256
-ACCESS_TOKEN_EXPIRE_MINUTES=1440
-
-# Gemini API Key (Optional: fallbacks to simulated reasoning if empty)
-GEMINI_API_KEY=AIzaSyYourKeyHere
+The primary objective of this project is to provide an intelligent, user-friendly, and centralized platform that helps students make informed decisions during their college admission journey.
 ```
 
----
+## Introduction
 
-## Database Initialization & Seeding
+```
+Choosing the right college is one of the most important decisions in a student's academic journey. Students often spend hours browsing multiple websites to collect information about eligibility, admission procedures, fee structures, entrance examinations, required documents, and college facilities.
 
-On backend startup, the system automatically checks if the `colleges` collection is empty. If it is, the server auto-seeds **9 premium institutions** representing various streams:
-- **IIT Delhi & IIT Bombay** (Engineering)
-- **IIM Ahmedabad** (Management)
-- **AIIMS New Delhi** (Medical)
-- **NLSIU Bengaluru** (Law)
-- **LSR College New Delhi** (Arts)
-- **NID Ahmedabad** (Design)
-- **Government Polytechnic Mumbai** (Diploma/Polytechnic)
-- **BITS Pilani** (Engineering/Pharmacy/Science)
+CampusAI solves this problem by bringing all essential admission-related information into one intelligent platform. The application uses artificial intelligence to answer admission-related queries while also providing structured college information through an interactive dashboard.
 
----
-
-## API Specifications
-
-| Method | Endpoint | Description | Guarded |
-| :--- | :--- | :--- | :---: |
-| `POST` | `/auth/signup` | Registers new student accounts | No |
-| `POST` | `/auth/login` | Validates credentials and returns JWT token | No |
-| `POST` | `/auth/logout` | Discards client sessions | No |
-| `POST` | `/auth/forgot-password` | Generates reset URL and tokens | No |
-| `POST` | `/auth/reset-password` | Updates passwords using valid reset tokens | No |
-| `GET` | `/auth/me` | Fetches active student profile from active token | **Yes** |
-| `GET` | `/colleges` | Queries, searches, and filters colleges | **Yes** |
-| `GET` | `/colleges/{id}` | Fetches detailed parameters for a college | **Yes** |
-| `POST` | `/colleges/seed` | Triggers database seeding manually | **Yes** |
-| `GET` | `/saved-colleges` | Fetches saved bookmarks | **Yes** |
-| `POST` | `/saved-colleges` | Bookmarks a college to saved list | **Yes** |
-| `DELETE` | `/saved-colleges/{id}` | Unbookmarks a college from list | **Yes** |
-| `GET` | `/chat/sessions` | Fetches chat session histories | **Yes** |
-| `GET` | `/chat/sessions/{id}` | Fetches message list for a session | **Yes** |
-| `POST` | `/chat/query` | Submits admission queries (triggers AI engine) | **Yes** |
-| `DELETE` | `/chat/sessions/{id}` | Deletes a conversation thread | **Yes** |
-| `POST` | `/planner/generate` | Builds dynamic step-by-step roadmap | **Yes** |
-| `GET` | `/planner/saved` | Restores saved roadmap blueprints | **Yes** |
-| `POST` | `/planner/save` | Persists roadmap blueprint in database | **Yes** |
-| `GET` | `/profile` | Fetches student profile parameters | **Yes** |
-| `PUT` | `/profile` | Updates student credentials, marks, budget | **Yes** |
-
----
-
-## Running Locally
-
-### Backend Setup
-1. Navigate to the `backend/` directory:
-   ```bash
-   cd backend
-   ```
-2. Initialize virtual environment & install packages:
-   ```bash
-   python -m venv .venv
-   .venv\Scripts\activate
-   pip install -r requirements.txt
-   ```
-3. Run verification test suite:
-   ```bash
-   python verify_phase3.py
-   ```
-4. Start dev server:
-   ```bash
-   python main.py
-   ```
-
-### Frontend Setup
-1. Navigate to the `frontend/` directory:
-   ```bash
-   cd ../frontend
-   ```
-2. Install npm dependencies & build:
-   ```bash
-   npm install
-   npm run build
-   ```
-3. Start Vite dev server:
-   ```bash
-   npm run dev
-   ```
-
----
-
-## Docker Container Deployment
-
-Start the entire stack (MongoDB, FastAPI backend API, Nginx frontend) using Docker Compose:
-
-```bash
-# Build and run containers
-docker-compose up --build -d
-
-# Verify logs
-docker-compose logs -f
+Apart from AI counseling, students can compare colleges side-by-side, generate personalized admission roadmaps, manage their academic profile, and receive guidance based on their preferences. The project aims to reduce confusion and simplify the overall admission process through automation and intelligent recommendations.
 ```
 
-The services will be hosted at:
-- **Frontend App:** `http://localhost`
-- **Backend API:** `http://localhost:8000`
-- **Swagger Docs:** `http://localhost:8000/docs`
+## Literature Review
+
+```
+Several online admission portals provide information regarding colleges, entrance examinations, and admission procedures. However, most existing systems only provide static information and lack personalized guidance.
+
+Recent developments in Artificial Intelligence and Natural Language Processing have enabled educational platforms to provide intelligent recommendation systems and conversational assistants that improve student decision-making.
+
+Modern admission guidance systems increasingly use AI to answer student queries, recommend suitable colleges, and automate admission-related tasks. CampusAI is inspired by these advancements and combines structured college databases with AI-powered counseling to create a complete admission assistance platform that is simple, interactive, and user-friendly.
+```
+
+## Methodology
+
+```
+The project follows the following workflow:
+
+1. Students register and securely log into the system.
+
+2. Users complete their academic profile by entering educational details and admission preferences.
+
+3. The AI Counselor processes admission-related questions and provides intelligent responses using structured college data.
+
+4. Students compare multiple colleges based on eligibility, fee structure, admission process, required documents, and available courses.
+
+5. The Admission Planner generates a personalized admission roadmap according to the student's marks, location, preferred course, budget, and college preferences.
+
+6. Students can edit their profile, download reports, and manage admission-related information through a responsive dashboard.
+```
+
+## Implementation
+
+```
+Frontend
+
+• React.js
+• TypeScript
+• Vite
+• Tailwind CSS
+• Framer Motion
+• Axios
+
+Backend
+
+• FastAPI
+• Python
+• JWT Authentication
+• MongoDB Atlas
+
+Database
+
+• MongoDB Atlas
+
+Libraries Used
+
+• FastAPI
+• Motor
+• Pydantic
+• Python-Jose
+• Passlib
+• PyJWT
+• Python-dotenv
+• Uvicorn
+
+Tools Used
+
+• Visual Studio Code
+• GitHub
+• Render
+• Vercel
+• MongoDB Atlas
+• Postman
+• npm
+
+Features Implemented
+
+• Secure User Registration and Login
+• JWT Authentication
+• Student Profile Management
+• AI Admission Counselor
+• College Search
+• College Comparison
+• Personalized Admission Planner
+• Roadmap Timeline Generation
+• PDF Export
+• Responsive Dashboard
+• REST API Integration
+• MongoDB Database Integration
+```
+
+## Result and Discussion
+
+```
+CampusAI successfully provides students with an intelligent and centralized admission guidance platform.
+
+The system allows students to register securely, manage their academic profile, compare colleges, generate personalized admission roadmaps, and receive AI-generated guidance regarding admissions, eligibility, fees, required documents, and admission procedures.
+
+The interactive dashboard presents information in a clean and user-friendly manner, making it easier for students to explore colleges and make informed admission decisions.
+
+Overall, the project demonstrates how Artificial Intelligence and modern web technologies can simplify the complex college admission process while improving the user experience.
+```
+
+## Limitation
+
+```
+1. College information depends on the available database records.
+
+2. AI-generated responses depend on the quality of stored college data.
+
+3. Some colleges may have incomplete admission information.
+
+4. Internet connectivity is required to access AI-powered features.
+
+5. Real-time admission updates and seat availability are not currently supported.
+
+6. The platform currently focuses on a predefined set of colleges stored in the database.
+```
+
+## Future Scope
+
+```
+1. Real-time admission notifications.
+
+2. AI-based college recommendation engine.
+
+3. Scholarship recommendation system.
+
+4. Multi-language support for regional students.
+
+5. Integration with official admission portals.
+
+6. Mobile application development.
+
+7. Voice-enabled AI admission counselor.
+
+8. Predictive admission probability analysis.
+
+9. Real-time cutoff and seat availability tracking.
+
+10. AI-powered career guidance and course recommendation.
+```
+
+## Conclusion
+
+```
+CampusAI is an AI-powered college admission assistance platform developed to simplify the admission journey for students. The project integrates artificial intelligence, secure authentication, structured college information, admission planning, and personalized guidance into a single web application.
+
+Students can compare colleges, receive AI-powered counseling, generate customized admission roadmaps, and manage their academic profile through an intuitive dashboard. By combining modern frontend technologies, FastAPI, MongoDB, and AI-based assistance, CampusAI provides an efficient, scalable, and user-friendly solution for college admission guidance.
+
+The project demonstrates how Artificial Intelligence can enhance educational support systems and help students make confident and well-informed admission decisions.
+```
